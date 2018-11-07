@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 #define MIN_STUDENT 3
-#define MAX_STUDENT 10
+#define MAX_STUDENT 40
 #define ASSISTENT_TIMES 3
 
 // Define threads
@@ -14,6 +14,7 @@ void * studentThread(void * arg);
 void * assistentThread();
 void showHeader();
 void showActualState();
+void showFooter();
 int generateWaitTime();
 
 // Define counts
@@ -66,9 +67,7 @@ int main(int argc, char const *argv[]) {
     pthread_join(students[i], NULL);
   }
 
-  // FOOTER
-  printf("----------------------------------------\n");
-  printf("Show, todos os alunos foram atendidos!!!\n");
+  showFooter();
   return 0;
 }
 
@@ -136,14 +135,16 @@ int generateWaitTime() {
 
 // Function to show header
 void showHeader() {
-  printf("----------------------------------------\n");
-  printf("Starting assistance\n");
-  printf("----------------------------------------\n");
-  printf("Number of students: %d \n", studentCount);
-  printf("Number of chairs: %d \n", chairCount);
-  printf("----------------------------------------\n");
+  // Print default header with informations
+  printf("\n----------------------------\n");
+  printf("----- Assistance Start -----\n");
+  printf("----------------------------\n");
+  printf("------- Students: %.2d -------\n", studentCount);
+  printf("-------- Chairs: %.2d --------\n", chairCount);
+  printf("----------------------------\n");
 
-  printf("00 - [AS] -");
+  // Print sumary of assistent and chairs
+  printf("[AS] -");
   for (int i = 0; i < chairCount; i++) {
     printf(" [CH]");
   }
@@ -152,10 +153,17 @@ void showHeader() {
 
 // Function to show state of assistent and chairs
 void showActualState() {
-  printf("%.2d - [%.2d] -", assistentIndex, assistantState);
+  printf("[%.2d] -", assistantState);
   for (int i = 0; i < chairCount; i++) {
     int index = i + assistentIndex;
     printf(" [%.2d]", assistentQueue[index]);
   }
   printf("\n");
+}
+
+void showFooter() {
+  // FOOTER
+  printf("----------------------------\n");
+  printf("Good, all students atended!!\n");
+  printf("----------------------------\n\n");
 }
